@@ -1,6 +1,7 @@
 body
 {
     background: url('img/background.jpg');
+    margin-bottom: 234px;
 }
 
 header
@@ -95,10 +96,20 @@ fieldset, div#content {
 div#content {
     padding: 5px;
     text-align: left;
-    width: 80%;
+    min-width: 80%;
+}
+
+div#content pre {
+    overflow-x: auto;
 }
 
 textarea#content {
     height: 200px;
     width: 90%;
+}
+
+div.answer {
+    float: right;
+    font-size: 65%;
+    font-style: italic;
 }
