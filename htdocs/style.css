@@ -1,0 +1,104 @@
+body
+{
+    background: url('img/background.jpg');
+}
+
+header
+{
+    margin: auto;
+    width: 999px;
+}
+header span
+{
+    display: none;
+}
+header h1
+{
+    background: url('img/logo.png');
+    height: 312px;
+    width: 100%;
+}
+header h2
+{
+    background: url('img/partage.png');
+    float: right;
+    height: 92px;
+    margin: -93px 125px 0 0;
+    width: 171px;
+}
+
+p,ul
+{
+    margin: auto;
+    width: 400px;
+}
+
+label {
+    color: #e9802c;
+    font-weight: bold;
+    margin-right: 5px;
+}
+label:hover {
+    text-decoration: underline;
+}
+
+input[type=text], input[type=password], select, textarea {
+    transition: background 0.75s;
+    -moz-transition: background 0.75s;
+    -webkit-transition: background 0.75s; 
+    -o-transition: background 0.75s;
+}
+input, select, textarea {
+    background: #558dd4;
+    border: #2f588b solid 1px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+input:hover, input:focus, select:hover, select:focus, textarea:hover, textarea:focus {
+    background: #95cdff;
+}
+input.erreur, select.erreur {
+    background: #df0009;
+    border: #f7000b solid 1px;
+}
+input.erreur:hover, select.erreur:hover {
+    background: #ff2029;
+}
+
+h1 {
+    color: #75903b;
+}
+h2 {
+    color: #7f9a48;
+}
+h3 {
+    color: #89a355;
+}
+h4, h5, h6 {
+    color: #95ae64;
+}
+
+form {
+    text-align: center;
+}
+
+fieldset, div#content {
+    background: #e3e3e3;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 11px #555;
+    min-height: 50px;
+    margin: auto;
+    width: 750px;
+}
+
+div#content {
+    padding: 5px;
+    text-align: left;
+    width: 80%;
+}
+
+textarea#content {
+    height: 200px;
+    width: 90%;
+}
