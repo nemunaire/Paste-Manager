@@ -108,7 +108,7 @@ class Paste
       }
       //If the file already exists, find another name if the content is different
       while(is_file(Paste::get_path($filename))
-            && !Paste::speed_cmp(Paste::get_path($filename), $hash));
+            && Paste::speed_cmp(Paste::get_path($filename), $hash));
     }
     $this->filename = $filename;
 
@@ -245,7 +245,7 @@ class Paste
 
   function add_answer($ref)
   {
-    if (!in_array($ref, $this->answers))
+    if (!in_array($ref, $this->answers) && $ref != $this->fileref)
     {
       $this->answers[] = $ref;
       return true;
