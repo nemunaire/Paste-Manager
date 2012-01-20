@@ -91,7 +91,7 @@ if (!empty($view))
       $doc = new DOMDocument();
       $doc->load(DESTINATION . "/" . $k . ".xml");
 
-      echo htmlentities($doc->getElementsByTagName("content")->item(0)->textContent);
+      echo htmlentities(utf8_decode($doc->getElementsByTagName("content")->item(0)->textContent));
       $language = strtolower($doc->getElementsByTagName("language")->item(0)->textContent);
       $ref = $k;
     }
