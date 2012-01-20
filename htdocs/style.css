@@ -113,3 +113,12 @@ div.answer {
     font-size: 65%;
     font-style: italic;
 }
+
+ins
+{
+    color: #00DF22;
+}
+del
+{
+    color: #DF2200;
+}

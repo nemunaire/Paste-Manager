@@ -22,7 +22,10 @@ foreach ($_GET as $k => $t)
 
         $geshi = new GeSHi($paste->content, $paste->language);
 
-	$geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 5);
+        if (!empty($kout[3]) && is_file(Paste::get_path($kout[3])))
+          $diff = new Paste($kout[3]);
+
+        $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 5);
 
 	?>
     <div id="corps" style="text-align: center;">
@@ -33,10 +36,13 @@ foreach ($_GET as $k => $t)
       <div id="content">
        <div class="answer">
 	 <a href="/?a=<?php echo $kout[1]; ?>">Répondre</a>
-         <?php echo $paste->get_ref(); ?>
+         <?php echo $paste->get_ref(isset($diff)); ?>
        </div>
 	<?php
-	 echo $geshi->parse_code();
+         if (isset($diff))
+           echo $paste->get_diff($diff);
+         else
+           echo $geshi->parse_code();
         ?>
       </div>
     </div>

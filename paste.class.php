@@ -166,12 +166,33 @@ class Paste
                                                  $this->date);
   }
 
-  function get_ref()
+  function get_ref($is_diff)
   {
     if (!empty($this->ref))
-      return '<a href="/?'.$this->ref.'">Voir l\'original</a>';
+    {
+      if (empty($is_diff))
+        return '<a href="/?'.$this->ref.'">Voir l\'original</a> '.
+        '<a href="/?'.$this->fileref.':'.$this->ref.'">Voir la différence</a>';
+      else
+        return '<a href="/?'.$this->fileref.'">Cacher les différences</a> ';
+    }
     else
       return "";
+  }
+
+  function get_diff($diff)
+  {
+    require_once("geshi/geshi.php");
+    require_once("simplediff.php");
+
+    $geshi = new GeSHi(htmlDiff($diff->content, $this->content),
+                       $this->language);
+
+    return str_replace("&lt;ins&gt;", "<ins>",
+           str_replace("&lt;/ins&gt;", "</ins>",
+           str_replace("&lt;del&gt;", "<del>",
+           str_replace("&lt;/del&gt;", "</del>",
+                       $geshi->parse_code()))));
   }
 }
 
