@@ -1,4 +1,3 @@
-      <h1>Dernières publications</h1>
 <?php
 
 require_once("../common.php");
@@ -12,6 +11,7 @@ if ($dh = opendir(DESTINATION))
 
   array_multisort($list, SORT_DESC);
 ?>
+      <h1>Dernières publications</h1>
       <ul id="list">
 	<?php
          if (empty($_GET["s"]))

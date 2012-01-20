@@ -34,6 +34,15 @@ p,ul
     text-align: left;
 }
 
+#res {
+    font-size: 80%;
+    text-align: right;
+}
+#res ul, #res ul li {
+    display: inline;
+    padding-right: 10px;
+}
+
 label {
     color: #e9802c;
     font-weight: bold;

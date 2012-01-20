@@ -11,6 +11,7 @@
 <?php
 require_once("../common.php");
 
+$view = 0;
 foreach ($_GET as $k => $t)
   {
     if (preg_match("#^([a-zA-Z0-9]{".RGXP_NB."})(:([a-zA-Z0-9]{".RGXP_NB."}))?$#", $k, $kout)
@@ -36,13 +37,14 @@ foreach ($_GET as $k => $t)
            echo $paste->get_diff($diff);
          else
            echo $paste->get_code();
+        echo $paste->show_answers();
         ?>
       </div>
     </div>
   </body>
 </html>
 <?php
-	  $view = true;
+	  $view++;
       }
   }
 

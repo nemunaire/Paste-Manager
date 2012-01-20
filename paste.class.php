@@ -14,6 +14,7 @@ class Paste
   var $ip;
   var $ref = NULL;
   var $hash;
+  var $answers = array();
 
   /**
    * Create a new paste or open a existing file
@@ -57,6 +58,9 @@ class Paste
       else
         $this->hash = NULL;
 
+      for ($i = 0; $i < $doc->getElementsByTagName("answer")->length; $i++)
+        $this->answers[] = $doc->getElementsByTagName("answer")->item($i)->textContent;
+
       //Check the lang exists
       if (empty($this->language) || !is_file(GESHI_DIR.$this->language.".php"))
         $this->language = "text";
@@ -90,9 +94,7 @@ class Paste
    */
   function save($filename=NULL)
   {
-    $this->date = time();
     $this->hash = base64_encode(sha1($this->content, true));
-    $this->ip = $_SERVER["REMOTE_ADDR"];
 
     if (empty($filename))
     {
@@ -129,8 +131,24 @@ class Paste
         $xml->createElement("content", $this->content));
 
     if (!empty($this->ref))
-      $xml_paste->appendChild(
+    {
+      //Also indicate in the parent file
+      $parent = new Paste($this->ref);
+
+      //Does the parent exist?
+      if ($parent->load())
+      {
+        $xml_paste->appendChild(
           $xml->createElement("ref", $this->ref));
+
+        if ($parent->add_answer($this->filename))
+          $parent->save();
+      }
+    }
+
+    foreach ($this->answers as $a)
+      $xml_paste->appendChild(
+        $xml->createElement("answer", $a));
 
     $xml_paste->appendChild(
         $xml->createElement("hash", $this->hash));
@@ -154,6 +172,8 @@ class Paste
     $this->title = $dict["title"];
     $this->author = $dict["author"];
     $this->language = $dict["lang"];
+    $this->date = time();
+    $this->ip = $_SERVER["REMOTE_ADDR"];
     if (isset($dict["ref"]))
       $this->ref = $dict["ref"];
 
@@ -221,6 +241,29 @@ class Paste
            str_replace("&lt;del&gt;", "<del>",
            str_replace("&lt;/del&gt;", "</del>",
                        $geshi->parse_code()))));
+  }
+
+  function add_answer($ref)
+  {
+    if (!in_array($ref, $this->answers))
+    {
+      $this->answers[] = $ref;
+      return true;
+    }
+    else
+      return false;
+  }
+
+  function show_answers()
+  {
+    $nb = count($this->answers);
+    if ($nb > 0)
+    {
+      $ret = '<div id="res">Des réponses à ce paste ont été publiées : <ul>';
+      foreach($this->answers as $a)
+        $ret .= '<li><a href="?'.$a.'">'.$a.'</a></li>';
+      return $ret.'</ul></div>';
+    }
   }
 }
 
