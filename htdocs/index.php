@@ -16,17 +16,10 @@ foreach ($_GET as $k => $t)
     if (preg_match("#^([a-zA-Z0-9]{".RGXP_NB."})(:([a-zA-Z0-9]{".RGXP_NB."}))?$#", $k, $kout)
 	&& is_file(Paste::get_path($kout[1])))
       {
-	require_once("../geshi/geshi.php");
-
         $paste = new Paste($kout[1]);
-
-        $geshi = new GeSHi($paste->content, $paste->language);
 
         if (!empty($kout[3]) && is_file(Paste::get_path($kout[3])))
           $diff = new Paste($kout[3]);
-
-        $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 5);
-
 	?>
     <div id="corps" style="text-align: center;">
       <h1>
@@ -42,7 +35,7 @@ foreach ($_GET as $k => $t)
          if (isset($diff))
            echo $paste->get_diff($diff);
          else
-           echo $geshi->parse_code();
+           echo $paste->get_code();
         ?>
       </div>
     </div>
@@ -120,6 +113,9 @@ else
 	  <input type="submit" value="Envoyer">
 	</fieldset>
       </form>
+<?php
+  include("list.php");
+?>
     </div>
   </body>
 </html>

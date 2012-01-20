@@ -52,7 +52,10 @@ class Paste
       else
         $this->ref = NULL;
       $this->ip = $doc->getElementsByTagName("ip")->item(0)->textContent;
-      $this->hash = $doc->getElementsByTagName("hash")->item(0)->textContent;
+      if ($doc->getElementsByTagName("hash")->length > 0)
+        $this->hash = $doc->getElementsByTagName("hash")->item(0)->textContent;
+      else
+        $this->hash = NULL;
 
       //Check the lang exists
       if (empty($this->language) || !is_file(GESHI_DIR.$this->language.".php"))
@@ -143,6 +146,9 @@ class Paste
     }
   }
 
+  /**
+   * Set attributes from an dictionnary like _POST
+   */
   function create($dict)
   {
     $this->title = $dict["title"];
@@ -155,6 +161,9 @@ class Paste
     $this->content = $dict["content"];
   }
 
+  /**
+   * Generate a subtitle
+   */
   function get_subtitle()
   {
     if (empty($this->author))
@@ -166,6 +175,9 @@ class Paste
                                                  $this->date);
   }
 
+  /**
+   * Get the ref HTML part of the paste
+   */
   function get_ref($is_diff)
   {
     if (!empty($this->ref))
@@ -180,6 +192,22 @@ class Paste
       return "";
   }
 
+  /**
+   * Get the parsed code
+   */
+  function get_code()
+  {
+    require_once("geshi/geshi.php");
+
+    $geshi = new GeSHi($this->content, $this->language);
+    $geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 5);
+
+    return $geshi->parse_code();
+  }
+
+  /**
+   * Get the parsed code with diff
+   */
   function get_diff($diff)
   {
     require_once("geshi/geshi.php");

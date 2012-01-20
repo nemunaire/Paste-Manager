@@ -31,7 +31,7 @@ header h2
 p,ul
 {
     margin: auto;
-    width: 400px;
+    text-align: left;
 }
 
 label {
@@ -68,6 +68,7 @@ input.erreur:hover, select.erreur:hover {
 
 h1 {
     color: #75903b;
+    text-align: center;
 }
 h2 {
     color: #7f9a48;
@@ -83,7 +84,7 @@ form {
     text-align: center;
 }
 
-fieldset, div#content {
+fieldset, div#content, ul#list {
     background: #e3e3e3;
     border: none;
     border-radius: 10px;
@@ -91,6 +92,11 @@ fieldset, div#content {
     min-height: 50px;
     margin: auto;
     width: 750px;
+}
+
+ul#list
+{
+    padding: 10px 10px 10px 20px;
 }
 
 div#content {
