@@ -31,4 +31,6 @@ if (ALLOW_NB_MIN != NB_CHAR)
 else
   define("RGXP_NB", NB_CHAR);
 
+require_once("paste.class.php");
+
 ?>

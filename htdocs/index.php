@@ -13,51 +13,27 @@ require_once("../common.php");
 
 foreach ($_GET as $k => $t)
   {
-    if (preg_match("#^[a-zA-Z0-9]{".RGXP_NB."}$#", $k)
-	&& is_file(DESTINATION . "/" . $k . ".xml"))
+    if (preg_match("#^([a-zA-Z0-9]{".RGXP_NB."})(:([a-zA-Z0-9]{".RGXP_NB."}))?$#", $k, $kout)
+	&& is_file(Paste::get_path($kout[1])))
       {
 	require_once("../geshi/geshi.php");
 
-	$doc = new DOMDocument();
-	$doc->load(DESTINATION . "/" . $k . ".xml");
+        $paste = new Paste($kout[1]);
 
-	$lang = strtolower($doc->getElementsByTagName("language")->item(0)->textContent);
-	if (empty($lang) || !is_file(GESHI_DIR.$lang.".php"))
-	  $lang = "text";
-
-	$geshi = new GeSHi(
-		   $doc->getElementsByTagName("content")->item(0)->textContent,
-		   $lang);
+        $geshi = new GeSHi($paste->content, $paste->language);
 
 	$geshi->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS, 5);
 
 	?>
     <div id="corps" style="text-align: center;">
       <h1>
-       <?php echo htmlentities(utf8_decode($doc->getElementsByTagName("title")->item(0)->textContent)); ?>
+       <?php echo htmlentities($paste->title); ?>
       </h1>
-      <h2>
-        Posté par <?php
-               $a = $doc->getElementsByTagName("author")->item(0)->textContent;
-	       if (empty($a))
-		 echo "<em>un anonyme</em>";
-	       else
-		 echo htmlentities(utf8_decode($a));
-	  ?>, le <?php
-	       echo strftime("%A %e %B %G à %H:%M:%S",
-		     $doc->getElementsByTagName("date")->item(0)->textContent);
-	  ?></h2>
+      <h2><?php echo $paste->get_subtitle(); ?></h2>
       <div id="content">
        <div class="answer">
-	 <a href="/?a=<?php echo $k; ?>">Répondre</a>
-	<?php
-	 $ref = $doc->getElementsByTagName("ref");
-	 if ($ref->length > 0)
-	   {
-	     $r = $ref->item(0)->textContent;
-	     echo '<a href="/?'.$r.'">Voir l\'original</a>';
-	   }
-        ?>
+	 <a href="/?a=<?php echo $kout[1]; ?>">Répondre</a>
+         <?php echo $paste->get_ref(); ?>
        </div>
 	<?php
 	 echo $geshi->parse_code();
@@ -70,8 +46,17 @@ foreach ($_GET as $k => $t)
 	  $view = true;
       }
   }
+
+//Don't show the creation part when we show paste
 if (!empty($view))
   exit;
+
+//Load answer paste
+if (!empty($_GET["a"]) && preg_match("#^[a-zA-Z0-9]{".RGXP_NB."}$#", $_GET["a"])
+    && is_file(Paste::get_path($k = $_GET["a"])))
+  $paste = new Paste($k);
+else
+  $paste = new Paste();
 ?>
     <header>
       <h1><span>Pommultimédia</span></h1>
@@ -81,21 +66,14 @@ if (!empty($view))
       <form method="post" action="save.php">
 	<fieldset class="paste_form">
 	  <label for="title">Titre :</label>
-	  <input type="text" maxlength="200" size="50" id="title" name="title">
+	  <input type="text" size="50" id="title" name="title" value="<?php
+            echo $paste->title;
+          ?>">
           <br><br>
 
 	  <label for="content">Contenu :</label><br>
 	  <textarea id="content" name="content"><?php
-  if (!empty($_GET["a"]) && preg_match("#^[a-zA-Z0-9]{".RGXP_NB."}$#", $_GET["a"])
-      && is_file(DESTINATION . "/" . ($k = $_GET["a"]) . ".xml"))
-    {
-      $doc = new DOMDocument();
-      $doc->load(DESTINATION . "/" . $k . ".xml");
-
-      echo htmlentities(utf8_decode($doc->getElementsByTagName("content")->item(0)->textContent));
-      $language = strtolower($doc->getElementsByTagName("language")->item(0)->textContent);
-      $ref = $k;
-    }
+            echo htmlentities(utf8_decode($paste->content));
           ?></textarea><br><br>
 
 	  <label for="author">Auteur :</label>
@@ -120,7 +98,7 @@ if (!empty($view))
 
       foreach ($lg as $l)
 	{
-	  if (isset($language) && $language == $l)
+	  if (!empty($paste->language) && $paste->language == $l)
 	    echo "<option selected=\"selected\"> ".ucfirst($l)."</option>\n";
 	  else
 	    echo "<option> ".ucfirst($l)."</option>\n";
@@ -130,8 +108,8 @@ if (!empty($view))
 ?>
 	  </select>
 <?php
-	  if (!empty($ref))
-	    echo '<input type="hidden" name="ref" value="'.$ref.'">';
+	  if (!empty($paste->fileref))
+	    echo '<input type="hidden" name="ref" value="'.$paste->fileref.'">';
 ?>
 	  <input type="submit" value="Envoyer">
 	</fieldset>
