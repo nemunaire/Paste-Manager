@@ -19,8 +19,32 @@ foreach ($_GET as $k => $t)
       {
         $paste = new Paste($kout[1]);
 
-        if (!empty($kout[3]) && is_file(Paste::get_path($kout[3])))
-          $diff = new Paste($kout[3]);
+        if (!empty($paste->crypt) && empty($_POST["passwd"]))
+        {
+          ?>
+    <div id="corps" style="text-align: center;">
+      <h1>
+       <?php echo htmlentities($paste->title); ?>
+      </h1>
+      <h2><?php echo $paste->get_subtitle(); ?></h2>
+      <div>
+        <form method="post" action="?<?php echo $kout[1]; ?>">
+	  <fieldset class="paste_form">
+	    <label for="title">Mot de passe :</label>
+	    <input type="password" size="42" id="passwd" name="passwd">
+            <br><br>
+	    <input type="submit" value="Voir le texte">
+	  </fieldset>
+        </form>
+          <?php
+        }
+        else
+        {
+          if (!empty($paste->crypt))
+            $paste->crypt($_POST["passwd"]);
+
+          if (!empty($kout[3]) && is_file(Paste::get_path($kout[3])))
+            $diff = new Paste($kout[3]);
 	?>
     <div id="corps" style="text-align: center;">
       <h1>
@@ -33,11 +57,12 @@ foreach ($_GET as $k => $t)
          <?php echo $paste->get_ref(isset($diff)); ?>
        </div>
 	<?php
-         if (isset($diff))
-           echo $paste->get_diff($diff);
-         else
-           echo $paste->get_code();
-        echo $paste->show_answers();
+           if (isset($diff))
+             echo $paste->get_diff($diff);
+           else
+             echo $paste->get_code();
+          echo $paste->show_answers();
+        }
         ?>
       </div>
     </div>
@@ -67,9 +92,11 @@ else
       <form method="post" action="save.php">
 	<fieldset class="paste_form">
 	  <label for="title">Titre :</label>
-	  <input type="text" size="50" id="title" name="title" value="<?php
+	  <input type="text" size="42" id="title" name="title" value="<?php
             echo $paste->title;
           ?>">
+	  <label for="author">Auteur :</label>
+	  <input type="text" maxlength="64" size="25" id="author" name="author">
           <br><br>
 
 	  <label for="content">Contenu :</label><br>
@@ -77,8 +104,8 @@ else
             echo htmlentities(utf8_decode($paste->content));
           ?></textarea><br><br>
 
-	  <label for="author">Auteur :</label>
-	  <input type="text" maxlength="64" size="35" id="author" name="author">
+          <label for="crypt" style="font-style: italic;">Mot de passe :</label>
+	  <input type="text" maxlength="64" size="25" id="crypt" name="crypt">
 
 	  <label for="lang">Langage :</label>
 	  <select id="lang" name="lang">

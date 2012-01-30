@@ -14,6 +14,7 @@ class Paste
   var $ip;
   var $ref = NULL;
   var $hash;
+  var $crypt = NULL;
   var $answers = array();
 
   /**
@@ -28,6 +29,29 @@ class Paste
       if ($this->load())
         $this->fileref = $filename;
     }
+  }
+
+  static function cxor($msg, $cle)
+  {
+    $cle = hash("whirlpool", $cle);
+
+    $xor = NULL;
+    for($i = 0; $i < strlen($msg); $i++)
+      $xor .= substr($msg,$i,1) ^ substr($cle, $i % strlen($cle), 1);
+    return $xor;
+  }
+
+  function crypt($key)
+  {
+    if (!empty($this->crypt))
+      $this->crypt = Paste::cxor($this->crypt, $key);
+    else
+      $this->crypt = Paste::cxor(sha1($key), $key);
+
+    if ($this->crypt == sha1($key))
+      $this->content = Paste::cxor(base64_decode($this->content), $key);
+    else
+      $this->content = base64_encode(Paste::cxor($this->content, $key));
   }
 
   /**
@@ -57,6 +81,11 @@ class Paste
         $this->hash = $doc->getElementsByTagName("hash")->item(0)->textContent;
       else
         $this->hash = NULL;
+
+      if ($doc->getElementsByTagName("crypt")->length > 0)
+        $this->crypt = base64_decode($doc->getElementsByTagName("crypt")->item(0)->textContent);
+      else
+        $this->crypt = NULL;
 
       for ($i = 0; $i < $doc->getElementsByTagName("answer")->length; $i++)
         $this->answers[] = $doc->getElementsByTagName("answer")->item($i)->textContent;
@@ -130,6 +159,9 @@ class Paste
     $xml_paste->appendChild(
         $xml->createElement("content", $this->content));
 
+    if (!empty($this->crypt))
+      $xml_paste->appendChild(
+        $xml->createElement("crypt", base64_encode($this->crypt)));
     if (!empty($this->ref))
     {
       //Also indicate in the parent file
@@ -179,6 +211,9 @@ class Paste
 
     //TODO: allow uploading file
     $this->content = $dict["content"];
+
+    if (!empty($dict["crypt"]))
+      $this->crypt($dict["crypt"]);
   }
 
   /**
