@@ -247,6 +247,20 @@ class Paste
       return "";
   }
 
+  function get_gen()
+  {
+    if (!empty($_POST["passwd"]))
+      $passwd = "=".$_POST["passwd"];
+    else
+      $passwd = "";
+    $raw = '<a href="/raw.php?'.$this->fileref.$passwd.'">Raw</a> ';
+
+    if ($this->language == "latex")
+      return $raw.'<a href="/gen.php?'.$this->fileref.$passwd.'">Générer le document</a> ';
+    else
+      return $raw;
+  }
+
   /**
    * Get the parsed code
    */
@@ -299,6 +313,11 @@ class Paste
         $ret .= '<li><a href="?'.$a.'">'.$a.'</a></li>';
       return $ret.'</ul></div>';
     }
+  }
+
+  function export_to_file($fileto)
+  {
+    file_put_contents($fileto, $this->content);
   }
 }
 

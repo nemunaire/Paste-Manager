@@ -55,6 +55,7 @@ foreach ($_GET as $k => $t)
        <div class="answer">
 	 <a href="/?a=<?php echo $kout[1]; ?>">Répondre</a>
          <?php echo $paste->get_ref(isset($diff)); ?>
+         <?php echo $paste->get_gen(isset($diff)); ?>
        </div>
 	<?php
            if (isset($diff))
