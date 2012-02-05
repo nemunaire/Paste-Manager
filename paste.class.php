@@ -156,8 +156,9 @@ class Paste
         $xml->createElement("date", $this->date));
     $xml_paste->appendChild(
         $xml->createElement("ip", $this->ip));
-    $xml_paste->appendChild(
-        $xml->createElement("content", $this->content));
+    $cnt = $xml->createElement("content");
+    $cnt->appendChild($xml->createCDATASection($this->content));
+    $xml_paste->appendChild($cnt);
 
     if (!empty($this->crypt))
       $xml_paste->appendChild(
