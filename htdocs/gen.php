@@ -57,7 +57,7 @@ foreach ($_GET as $k => $t)
     <meta charset="UTF-8">
     <title>.: Pommultimédia - Paste :.</title>
     <link href="style.css" rel="stylesheet" type="text/css">
-    <link href="favicon.ico" type="image/x-icon" rel="shortcut icon"/>
+    <link href="favicon.ico" type="image/x-icon" rel="shortcut icon">
   </head>
   <body>
     <div id="corps" style="text-align: center;">
@@ -84,9 +84,12 @@ foreach ($_GET as $k => $t)
       if (!empty($paste->crypt))
       {
         if (!empty($_POST["passwd"]))
-          $paste->crypt($_POST["passwd"]);
-        else
-          $paste->crypt($t);
+          $t = $_POST["passwd"];
+
+        $paste->crypt($t);
+
+        if ($paste->crypt != sha1($t))
+          die ("Bad password");
       }
 
       $filename = "../gen/".$paste->fileref;
