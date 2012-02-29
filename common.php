@@ -16,6 +16,9 @@ define("NB_CHAR", 5);
 // can adjust the minimum
 define("ALLOW_NB_MIN", 5);
 
+// The adress of this service
+define("HTTP_URL", "paste.p0m.fr");
+
 
 
 /*********************************************
