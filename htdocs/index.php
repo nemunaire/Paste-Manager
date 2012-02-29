@@ -7,7 +7,7 @@
     <link href="favicon.ico" type="image/x-icon" rel="shortcut icon"/>
   </head>
   <body>
-<a href="http://github.com/nemunaire/Paste-Manager"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/4c7dc970b89fd04b81c8e221ba88ff99a06c6b61/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub"></a>
+<a href="http://github.com/nemunaire/Paste-Manager"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/c641758e06304bc53ae7f633269018169e7e5851/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67" alt="Fork me on GitHub"></a>
 <?php
 require_once("../common.php");
 
@@ -53,7 +53,7 @@ foreach ($_GET as $k => $t)
       <h2><?php echo $paste->get_subtitle(); ?></h2>
       <div id="content">
        <div class="answer">
-	 <a href="/?a=<?php echo $kout[1]; ?>">Répondre</a>
+         <a href="/?a=<?php echo $kout[1]; if (!empty($_POST["passwd"])) echo ":".$_POST["passwd"]; ?>">Répondre</a>
          <?php echo $paste->get_ref(isset($diff)); ?>
          <?php echo $paste->get_gen(isset($diff)); ?>
        </div>
@@ -79,7 +79,7 @@ if (!empty($view))
   exit;
 
 //Load answer paste
-if (!empty($_GET["a"]) && preg_match("#^[a-zA-Z0-9]{".RGXP_NB."}$#", $_GET["a"])
+if (!empty($_GET["a"]) && preg_match("#^([a-zA-Z0-9]{".RGXP_NB."})(:([a-zA-Z0-9]{".RGXP_NB."}))?$#", $_GET["a"], $kout)
     && is_file(Paste::get_path($k = $_GET["a"])))
   $paste = new Paste($k);
 else

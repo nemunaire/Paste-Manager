@@ -26,7 +26,7 @@ if ($dh = opendir(DESTINATION))
              continue;
            }
 
-           if ($i++ > 10)
+           if ($i > 10)
            {
              print '<li><a href="./?s='.(intval($_GET["s"])+10).'#list">Plus anciens ...</a></li>';
              break;
@@ -35,6 +35,8 @@ if ($dh = opendir(DESTINATION))
            if (preg_match("#^([a-zA-Z0-9]{".RGXP_NB."}).xml$#", $f[1], $fout))
            {
              $paste = new Paste($fout[1]);
+             if ($paste->is_private ())
+               continue;
 
              if (empty($paste->title))
                $title = "Sans titre";
@@ -47,7 +49,7 @@ if ($dh = opendir(DESTINATION))
                $author = htmlentities($paste->author);
 
              print '<li><a href="./?'.$paste->fileref.'">'.$title."</a> par ".$author.", le ".date("d/m/Y H:i:s", $paste->date)."</li>";
-
+             $i++;
            }
          }
         ?>

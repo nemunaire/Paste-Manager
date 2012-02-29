@@ -9,7 +9,7 @@ function generate_latex($filein, $content)
   if (is_file($fileout))
     return $fileout;
 
-  if (!preg_match("#\\begin{document}#ui", $content))
+  if (!preg_match("#begin{document}#ui", $content))
     $content = "\documentclass[10pt]{report}
 
 \usepackage[utf8x]{inputenc}

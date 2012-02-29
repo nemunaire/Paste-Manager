@@ -12,6 +12,7 @@ class Paste
   var $date;
   var $content;
   var $ip;
+  var $private = false;
   var $ref = NULL;
   var $hash;
   var $crypt = NULL;
@@ -81,6 +82,9 @@ class Paste
         $this->hash = $doc->getElementsByTagName("hash")->item(0)->textContent;
       else
         $this->hash = NULL;
+
+      if ($doc->getElementsByTagName("private")->length > 0)
+        $this->private = true;
 
       if ($doc->getElementsByTagName("crypt")->length > 0)
         $this->crypt = base64_decode($doc->getElementsByTagName("crypt")->item(0)->textContent);
@@ -185,6 +189,10 @@ class Paste
 
     $xml_paste->appendChild(
         $xml->createElement("hash", $this->hash));
+
+    if ($this->is_private ())
+      $xml_paste->appendChild(
+        $xml->createElement("private"));
 
     $xml->appendChild($xml_paste);
 
@@ -314,6 +322,11 @@ class Paste
         $ret .= '<li><a href="?'.$a.'">'.$a.'</a></li>';
       return $ret.'</ul></div>';
     }
+  }
+
+  function is_private()
+  {
+    return $this->private;
   }
 
   function export_to_file($fileto)

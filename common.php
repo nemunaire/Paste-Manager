@@ -1,12 +1,12 @@
 <?php
 
 // The directory where code will be stored
-define("DESTINATION", "../files/");
+define("DESTINATION", __dir__."/files/");
 if (!is_writable(DESTINATION))
   die ("Destination folder not writable");
 
 // Path to the GeSHi languages
-define("GESHI_DIR", "../geshi/geshi/");
+define("GESHI_DIR", __dir__."/geshi/geshi/");
 
 
 // The size of the generated identifier
