@@ -1,4 +1,6 @@
-<!doctype html>
+<?php
+header("Content-type: text/html; charset=UTF-8");
+?><!doctype html>
 <html>
   <head>
     <meta charset="UTF-8">

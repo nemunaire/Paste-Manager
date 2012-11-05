@@ -23,12 +23,15 @@ function generate_latex($filein, $content)
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{array}
+\usepackage{tikz}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{language=C++,keywordstyle=\color{blue},stringstyle=\color{mauve}}
+\usetikzlibrary{arrows}
 
 \begin{document}".$content."\end{document}";
 
@@ -103,7 +106,7 @@ foreach ($_GET as $k => $t)
         print "Je ne sais pas compiler ce code source :(";
       $log = ob_get_clean();
       ob_end_clean();
-      
+
       if (isset($f) && is_file($f))
       {
         header('Content-Description: File Transfer');

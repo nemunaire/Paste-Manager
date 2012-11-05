@@ -58,7 +58,8 @@ foreach ($_GET as $k => $t)
           $paste->crypt($t);
       }
 
-      header("Content-Type: text/html; charset=UTF-8");
+      header("Content-Type: text/plain; charset=UTF-8");
+      header("Content-Disposition: inline; filename=\"".addslashes($paste->title)."\"");
       echo ($paste->content);
     }
   }

@@ -65,13 +65,11 @@ class Paste
       $doc = new DOMDocument();
       $doc->load($this->filename);
 
-      $this->title = utf8_decode(
-        $doc->getElementsByTagName("title")->item(0)->textContent);
+      $this->title = $doc->getElementsByTagName("title")->item(0)->textContent;
       $this->language = strtolower(
         $doc->getElementsByTagName("language")->item(0)->textContent);
       $this->date = $doc->getElementsByTagName("date")->item(0)->textContent;
-      $this->author = utf8_decode(
-        $doc->getElementsByTagName("author")->item(0)->textContent);
+      $this->author = $doc->getElementsByTagName("author")->item(0)->textContent;
       $this->content = $doc->getElementsByTagName("content")->item(0)->textContent;
       if ($doc->getElementsByTagName("ref")->length > 0)
         $this->ref = $doc->getElementsByTagName("ref")->item(0)->textContent;
@@ -119,7 +117,7 @@ class Paste
       return ($hash == $doc->getElementsByTagName("hash")->item(0)->textContent);
     }
     else
-      return FALSE;    
+      return FALSE;
   }
 
   /**
