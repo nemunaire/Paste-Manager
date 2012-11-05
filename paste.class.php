@@ -139,7 +139,7 @@ class Paste
       }
       //If the file already exists, find another name if the content is different
       while(is_file(Paste::get_path($filename))
-            && Paste::speed_cmp(Paste::get_path($filename), $hash));
+            && Paste::speed_cmp(Paste::get_path($filename), $this->hash));
     }
     $this->filename = $filename;
 
@@ -211,6 +211,7 @@ class Paste
     $this->title = $dict["title"];
     $this->author = $dict["author"];
     $this->language = $dict["lang"];
+    $this->private = intval($dict["hide"]);
     $this->date = time();
     $this->ip = $_SERVER["REMOTE_ADDR"];
     if (isset($dict["ref"]))
@@ -286,17 +287,9 @@ class Paste
    */
   function get_diff($diff)
   {
-    require_once("geshi/geshi.php");
     require_once("simplediff.php");
 
-    $geshi = new GeSHi(htmlDiff($diff->content, $this->content),
-                       $this->language);
-
-    return str_replace("&lt;ins&gt;", "<ins>",
-           str_replace("&lt;/ins&gt;", "</ins>",
-           str_replace("&lt;del&gt;", "<del>",
-           str_replace("&lt;/del&gt;", "</del>",
-                       $geshi->parse_code()))));
+    return nl2br(htmlDiff($diff->content, $this->content));
   }
 
   function add_answer($ref)

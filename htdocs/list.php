@@ -37,10 +37,10 @@ if ($dh = opendir(DESTINATION))
            if ($i > 23)
            {
              $GT = $GA = $GL = "";
-             if (!empty($srch_title)) $GR = "&amp;title=".$srch;
-             if (!empty($srch_author)) $GR = "&amp;author=".$srch;
-             if (!empty($srch_lang)) $GR = "&amp;lang=".$srch;
-             print '<li><a href="./?s='.(intval($_GET["s"])+23).$GR.'#list">Plus anciens ...</a></li>';
+             if (!empty($srch_title)) $GT = "&amp;title=".$srch;
+             if (!empty($srch_author)) $GA = "&amp;author=".$srch;
+             if (!empty($srch_lang)) $GL = "&amp;lang=".$srch;
+             print '<li><a href="./?s='.(intval($_GET["s"])+23).$GT.$GA.$GL.'#list">Plus anciens ...</a></li>';
              break;
            }
 

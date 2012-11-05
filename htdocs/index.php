@@ -104,11 +104,11 @@ else
 
 	  <label for="content">Contenu :</label><br>
 	  <textarea id="content" name="content"><?php
-            echo htmlentities(utf8_decode($paste->content));
+            echo htmlentities($paste->content);
           ?></textarea><br><br>
 
           <label for="crypt" style="font-style: italic;">Mot de passe :</label>
-	  <input type="text" maxlength="64" size="25" id="crypt" name="crypt">
+	  <input type="text" maxlength="64" size="20" id="crypt" name="crypt">
 
 	  <label for="lang">Langage :</label>
 	  <select id="lang" name="lang">
@@ -142,6 +142,9 @@ else
 	  if (!empty($paste->fileref))
 	    echo '<input type="hidden" name="ref" value="'.$paste->fileref.'">';
 ?>
+	  <input type="checkbox" id="hide" name="hide" value="1">
+          <label for="hide">Invisible</label>
+
 	  <input type="submit" value="Envoyer">
 	</fieldset>
       </form>
